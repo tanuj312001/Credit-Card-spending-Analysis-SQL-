@@ -24,12 +24,14 @@ LIMIT 5
 
 ### Summary statistics of categorical variables 
 
+
 | City      | Card Type | Exp Type | Gender | Month |
 |-----------|-----------|----------|--------|-------|
 | count     | 26052     | 26052    | 26052  | 26052 |
 | unique    | 986       | 4        | 6      | 12    |
 | top       | Bengaluru | Silver   | Food   | Jan   |
 | freq      | 3552      | 6840     | 5463   | 13680 |
+
 
 We get to know:
 - Bengaluru is most frequent in transactions.
