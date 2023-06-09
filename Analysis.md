@@ -22,6 +22,7 @@ LIMIT 5
 | 3     | Greater Mumbai, India| 12-Apr-14  | Signature | Bills    | F      | 123424 |
 | 4     | Bengaluru, India     | 05-May-15  | Gold      | Bills    | F      | 171574 |
 
+
 ### 1. Summary statistics of categorical variables 
 
 
@@ -39,6 +40,7 @@ We get to know:
 - Most of the transactions are done in food Category.
 - Female Does the most no of transactions.
 
+
 ### 2. City analyis. Top 5 cities with highest spends and their percentage contribution of total credit card spends.
 
 ````sql
@@ -49,6 +51,7 @@ GROUP BY City
 ORDER BY city_spend DESC
 LIMIT 5;
 ````
+
 
 **Results**
 
