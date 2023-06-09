@@ -39,6 +39,34 @@ We get to know:
 - Most of the transactions are done in food Category.
 - Female Does the most no of transactions.
 
+### 2. City analyis. Top 5 cities with highest spends and their percentage contribution of total credit card spends.
+
+````sql
+
+SELECT City, SUM(Amount) AS city_spend, ROUND(SUM(Amount) * 100 / (SELECT SUM(Amount) FROM credit),2) AS percentage
+FROM credit
+GROUP BY City
+ORDER BY city_spend DESC
+LIMIT 5;
+````
+
+**Results**
+
+| City                  | city_spend  | percentage |
+|-----------------------|-------------|------------|
+| Greater Mumbai, India | 576,751,476 | 14.15      |
+| Bengaluru, India      | 572,326,739 | 14.05      |
+| Ahmedabad, India      | 567,794,310 | 13.93      |
+| Delhi, India          | 556,929,212 | 13.67      |
+| Kolkata, India        | 115,466,943 | 2.83       |
+
+![ci](https://github.com/tanuj312001/ChicagoCrime-SQL-analysis/assets/60888384/2a474a67-19e0-48d0-84f9-681add465b39)
+
+As we can see:
+- Greater Mumbai represents most transaction amount with a percentage of 14.15
+- Bengaluru actually had most transactions but comes second in terms of total transaction value.
+
+
 
 
 
