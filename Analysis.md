@@ -22,7 +22,7 @@ LIMIT 5
 | 3     | Greater Mumbai, India| 12-Apr-14  | Signature | Bills    | F      | 123424 |
 | 4     | Bengaluru, India     | 05-May-15  | Gold      | Bills    | F      | 171574 |
 
-### Summary statistics of categorical variables 
+### 1. Summary statistics of categorical variables 
 
 
 | City      | Card Type | Exp Type | Gender | Month |
