@@ -1,0 +1,23 @@
+# CREDIT CARD SPENDING HABITS IN INDIA
+
+**Creator**: Tanuj Shankarwar
+**Email**: tshankarwar@ucsd.edu
+**Linkedin**: https://www.linkedin.com/in/tanuj-s-662785166/
+
+### First things first, lemme show you what data do we have 
+
+````sql
+SELECT *
+FROM credit
+LIMIT 5
+````
+
+**Results**
+| Index | City                 | Date       | Card Type | Exp Type | Gender | Value  |
+|-------|----------------------|------------|-----------|----------|--------|--------|
+| 0     | Delhi, India         | 29-Oct-14  | Gold      | Bills    | F      | 82475  |
+| 1     | Greater Mumbai, India| 22-Aug-14  | Platinum  | Bills    | F      | 32555  |
+| 2     | Bengaluru, India     | 27-Aug-14  | Silver    | Bills    | F      | 101738 |
+| 3     | Greater Mumbai, India| 12-Apr-14  | Signature | Bills    | F      | 123424 |
+| 4     | Bengaluru, India     | 05-May-15  | Gold      | Bills    | F      | 171574 |
+
