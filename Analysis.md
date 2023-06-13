@@ -71,6 +71,53 @@ As we can see:
 
 
 
+### 3. query to print 3 columns: city, highest_expense_type , lowest_expense_type.
 
+````sql
+with total_spend_city_exp as (
+SELECT City,Exp_type, SUM(Amount) as total_amount
+FROM credit
+GROUP BY City,Exp_type
+),
+highest_expense as (
+SELECT A.city, A.Exp_type as highest_exp_type FROM total_spend_city_exp AS A 
+INNER JOIN
+(SELECT city , MAX(total_amount) as max_expense_type
+FROM total_spend_city_exp
+GROUP BY city) as B 
+ON A.city=B.city AND A.total_amount=B.max_expense_type
+),
+lowest_expense as (
+SELECT A.city, A.Exp_type as lowest_exp_type FROM total_spend_city_exp AS A 
+INNER JOIN
+(SELECT city , MIN(total_amount) as min_expense_type
+FROM total_spend_city_exp
+GROUP BY city) as B 
+ON A.city=B.city AND A.total_amount=B.min_expense_type
+)
 
+SELECT H.city, H.highest_exp_type, L.lowest_exp_type
+FROM highest_expense H INNER JOIN lowest_expense L
+ON H.city=L.city 
+LIMIT 15
+````
+**Results**
+
+| City                  | Highest Expense Type | Lowest Expense Type |
+| --------------------- | -------------------- | ------------------- |
+| Ahmedabad, India      | Bills                | Grocery             |
+| Delhi, India          | Bills                | Entertainment       |
+| Greater Mumbai, India | Bills                | Entertainment       |
+| Bengaluru, India      | Bills                | Grocery             |
+| Thana Bhawan, India   | Grocery              | Entertainment       |
+| Karjat, India         | Entertainment        | Fuel                |
+| Sillod, India         | Fuel                 | Grocery             |
+| Udaipurwati, India    | Grocery              | Entertainment       |
+| Vrindavan, India      | Bills                | Grocery             |
+| Mudhol, India         | Entertainment        | Bills               |
+| Sohna, India          | Food                 | Entertainment       |
+| Chalakudy, India      | Entertainment        | Entertainment       |
+| Rahuri, India         | Bills                | Entertainment       |
+| Rajpipla, India       | Food                 | Bills               |
+| Aizawl, India         | Food                 | Grocery             |
 
