@@ -71,7 +71,7 @@ As we can see:
 
 
 
-### 3. query to print 3 columns: city, highest_expense_type , lowest_expense_type.
+### 3. Query to print 3 columns: city, highest_expense_type , lowest_expense_type.
 
 ````sql
 with total_spend_city_exp as (
@@ -120,4 +120,77 @@ LIMIT 15
 | Rahuri, India         | Bills                | Entertainment       |
 | Rajpipla, India       | Food                 | Bills               |
 | Aizawl, India         | Food                 | Grocery             |
+
+
+
+### 4. Query to find percentage contribution of spends by females for each expense type
+
+````sql
+with spend_by_female as (
+SELECT Exp_type, SUM(Amount) as female_spend
+FROM credit
+WHERE Gender='F'
+GROUP BY Exp_type
+),
+ total_spend as (
+SELECT Exp_type, SUM(Amount) as total_spend
+FROM credit
+GROUP BY Exp_type
+)
+
+SELECT F.exp_type, F.female_spend, T.total_spend,  F.female_spend*100/T.total_spend as female_pct
+FROM spend_by_female F JOIN total_spend T
+ON F.Exp_type=T.Exp_type
+
+````
+
+**Results**
+
+| Expense Type    | Female Spend   | Total Spend    | Female %       |
+| --------------- | -------------- | -------------- | -------------- |
+| Bills           | 580,035,469    | 907,072,473    | 63.9459%       |
+| Food            | 452,817,279    | 824,724,009    | 54.9053%       |
+| Entertainment   | 358,663,333    | 726,437,536    | 49.3729%       |
+| Grocery         | 365,646,998    | 718,207,923    | 50.9110%       |
+| Fuel            | 392,282,421    | 789,135,821    | 49.7104%       |
+| Travel          | 55,865,530     | 109,255,611    | 51.1329%       |
+
+
+### 5. Which card and expense type combination saw highest month over month growth in Jan-2014?
+
+````sql
+with month_year_spend as (
+	SELECT  
+	card_type, 
+	exp_type, 
+	MONTH (str_to_date(date, '%d-%b-%y')) AS spend_month, 
+	YEAR (str_to_date(date, '%d-%b-%y')) AS spend_year
+,
+	SUM(amount) AS spend
+	From credit
+	GROUP BY card_type, exp_type, spend_month, spend_year
+)	
+,get_prev_spend AS (
+SELECT *, LAG(spend) OVER(PARTITION BY card_type,exp_type ORDER BY spend_year,spend_month) 
+AS lag_spend
+FROM  month_year_spend
+)
+
+SELECT *,
+(spend-lag_spend) AS  growth
+FROM get_prev_spend
+WHERE spend_month=1 and spend_year=2014 and (spend-lag_spend)>0
+ORDER BY  (spend-lag_spend) DESC LIMIT 1;
+
+````
+
+**Results**
+
+| card_type | exp_type | spend_month | spend_year | spend       | lag_spend   | growth      |
+| --------- | -------- | ----------- | ---------- | ----------- | ----------- | ----------- |
+| Platinum  | Grocery  | 1           | 2014       | 12,256,343  | 7,757,562   | 4,498,781   |
+
+
+
+
 
