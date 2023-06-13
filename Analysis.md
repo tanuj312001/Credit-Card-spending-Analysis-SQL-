@@ -192,5 +192,63 @@ ORDER BY  (spend-lag_spend) DESC LIMIT 1;
 
 
 
+### 6. During weekends which city has highest total spend to total no of transcations ratio?
 
+````sql
+with weekend as (
+SELECT *,CASE WHEN DAYOFWEEK(STR_TO_DATE(date, '%d-%b-%y')) IN (0,7) THEN 'Weekend' ELSE
+'Not Weekend' END AS is_weekend
+FROM credit 
+),
+ weekend_city_trans AS (
+SELECT City, SUM(amount) AS total_spend, COUNT(*) as total_transactions
+FROM weekend
+WHERE is_weekend='Weekend'
+GROUP BY City
+)
+
+SELECT *, total_spend/total_transactions as ratio
+FROM weekend_city_trans
+ORDER BY ratio DESC 
+LIMIT 1
+````
+
+**Results**
+
+| City                    | total_spend | total_transactions | ratio       |
+| ----------------------- | ----------- | ------------------ | ----------- |
+| Raghogarh-Vijaypur, India | 299,980     | 1                  | 299,980.0000|
+
+
+
+
+### 7. which city took least number of days to reach its 500th transaction after first transaction in that 
+
+````sql
+with first_trans as (
+SELECT City, rnk, STR_TO_DATE(date, '%d-%b-%y') as date
+FROM (SELECT *, 
+DENSE_RANK() OVER(PARTITION BY city ORDER BY STR_TO_DATE(date, '%d-%b-%y') ASC) as rnk 
+FROM credit) X
+WHERE X.rnk=1
+),
+fivehundred_trans as (
+SELECT City, rnk, STR_TO_DATE(date, '%d-%b-%y') as date
+FROM (SELECT *, 
+ROW_NUMBER() OVER(PARTITION BY city ORDER BY STR_TO_DATE(date, '%d-%b-%y') ASC) as rnk 
+FROM credit) X
+WHERE X.rnk=500
+)
+SELECT f.city as city, f.date as first_trans_date,
+l.date as five_hundred_trans
+FROM first_trans f JOIN fivehundred_trans l 
+ON f.city=l.city 
+ORDER BY l.date-f.date LIMIT 1
+````
+
+**Results**
+
+| city            | first_trans_date | five_hundred_trans |
+| --------------- | ---------------- | ------------------ |
+| Bengaluru, India| 2013-10-04       | 2013-12-24         |
 
